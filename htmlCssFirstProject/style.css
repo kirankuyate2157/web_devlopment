@@ -57,7 +57,7 @@
      width: 100%;
  }
  
- .hero__ @media (min-width :768px) {
+ @media (min-width :768px) {
      .navbar {
          justify-content: space-between;
          padding: 10px 20px;

@@ -1,0 +1,66 @@
+/* //Display 
+
+* {
+    margin: 0;
+}
+
+.parent {
+    background-color: aqua;
+}
+
+.child {
+    background-color: purple;
+    padding: 10px;
+    border-radius: 10px;
+    display: inline-block;
+    margin: 30px;
+} */
+
+
+/* position */
+
+
+/* 
+body {
+    background-color: black;
+}
+
+.parent {
+    position: relative;
+    background-color: darkblue;
+    width: 300px;
+    height: 300px;
+}
+
+.child {
+    position: absolute;
+    background-color: bisque;
+    width: 100px;
+    height: 100px;
+    left: 50%;      
+    right: 50%;
+    bottom: 50%;
+    top: 50%;
+} */
+
+
+/* pading  mrgin */
+
+* {
+    margin: 0;
+}
+
+.parent {
+    display: inline-block;
+    background-color: black;
+    width: 300px;
+    height: 300px;
+    padding: 30px;
+    margin: 50px;
+}
+
+.content {
+    background-color: darkgoldenrod;
+    width: 300px;
+    height: 300px;
+}

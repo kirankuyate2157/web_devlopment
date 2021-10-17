@@ -1,0 +1,84 @@
+ * {
+     margin: 0;
+     padding: 0;
+     box-sizing: border-box;
+     /*to box model*/
+ }
+ /* Gloabl */
+ 
+ body {
+     font-family: "Merriweather", sans-serif;
+     background-color: #ebf2ff;
+     overflow-x: hidden;
+ }
+ 
+ .navbar {
+     display: flex;
+     justify-content: space-around;
+     align-items: center;
+ }
+ 
+ .navbar__brand {
+     width: 100px;
+ }
+ 
+ .navbar__logo {
+     width: 100%;
+ }
+ 
+ .button__primary {
+     background-image: linear-gradient( to right, #ff0066, #ff33cc, #cc33ff);
+     border-radius: 5px;
+     color: #fff;
+     padding: 10px;
+     border: none;
+ }
+ 
+ .container {
+     width: 100%;
+     margin: 0 auto;
+     padding: 0 15px;
+ }
+ 
+ .hero__container {
+     width: 100%;
+     display: flex;
+     flex-direction: row-reverse;
+     align-items: center;
+     justify-content: space-between;
+     gap: 10px;
+ }
+ 
+ .hero__image__container {
+     width: 100%;
+ }
+ 
+ .hero__image {
+     width: 100%;
+ }
+ 
+ .hero__ @media (min-width :768px) {
+     .navbar {
+         justify-content: space-between;
+         padding: 10px 20px;
+     }
+     .navbar__brand {
+         width: 150px;
+     }
+     .button__primary {
+         padding: 15px;
+         font-size: 20px;
+     }
+ }
+ 
+ @media (min-width: 1020px) {
+     .container {
+         max-width: 1010px;
+     }
+     .hero__image__container {
+         width: 500px;
+         height: 300px;
+     }
+ }
+ 
+ @media (min-width:1400px) {}

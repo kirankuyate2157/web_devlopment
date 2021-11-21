@@ -168,36 +168,30 @@ body {
     }
 }
 
-
-}
 @media (min-width: 1020px) {
     .container {
         max-width: 1010px;
     }
-    
     .hero__image__container {
         width: 500px;
         height: 300px;
     }
-    
     .explore__menu__lists {
         gap: 20px;
         padding: 0 20px;
     }
-    
     .explore__menu__text {
         font-size: 50px;
     }
-    
     .hero__container {
         width: 100%;
         display: flex;
     }
-    
     .hero__description {
         width: 100%;
     }
 }
+
 @media (min-width:1400px) {
     .container {
         max-width: 1250px;

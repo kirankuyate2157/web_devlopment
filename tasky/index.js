@@ -2,7 +2,7 @@ const taskContainer = document.querySelector(".task_Container");
 // console.log(taskContainer);
 const newCard = ({
   id,
-  imgUrl,
+  imageUrl,
   taskTitle,
   taskType,
   taskDescription,
@@ -15,7 +15,7 @@ const newCard = ({
                 class="fas fa-trash-alt"></i></button>
 
     </div>
-    <img src=${imgUrl}
+    <img src=${imageUrl}
         class="card-img-top p-2" alt="card img">
     <div class="card-body">
         <h5 class="card-title">${taskTitle}</h5>
@@ -31,13 +31,14 @@ const newCard = ({
 </div>`;
 const saveChanges = () => {
   const taskData = {
-    id: `${Date.now()}`, //unique number for card id ( milli seconds)
+    id: `${Date.now()}`, //unique number for card id ( millisecond seconds)
     imageUrl: document.getElementById("imageUrl").value,
     taskTitle: document.getElementById("taskTitle").value,
     taskType: document.getElementById("taskType").value,
     taskDescription: document.getElementById("taskDescription").value,
   };
-  console.log(taskData);
+  console.log("image link  ")
+  console.log(taskData.imageUrl);
   const createNewCard = newCard(taskData);
   taskContainer.insertAdjacentHTML("beforeend", createNewCard);
 };

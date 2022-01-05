@@ -63,4 +63,12 @@ const saveChanges = () => {
 
   localStorage.setItem("tasky", JSON.stringify({ cards: globalStore })); //an object
 };
-
+/*
+Issues
+1.modal not closing after saving /adding data   -[solved]
+2.the saved cards vanish/delete after refreshing page  -[solved]
+3.Features
+4.delete modal features
+5.open task 
+6.edit task
+*/

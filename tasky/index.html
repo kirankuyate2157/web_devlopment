@@ -20,8 +20,8 @@
     <title>Tasky</title>
 </head>
 
-<body>
-
+<body onload="loadInitialCardData()" > <!-- calling_local_storage_ata_function -->
+    
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -45,7 +45,6 @@
                       </div><div class="mb-3">
                         <label for="taskdescription" class="form-label">Task description</label>
                        <textarea  rows="6"class="form-control" id="taskDescription" placeholder="building an Amazing API"></textarea>
-                    
                     </div>
                 </div>
                 <div class="modal-footer">

@@ -1,19 +1,17 @@
+// selecting HTML code
 const taskContainer = document.querySelector(".task_Container");
-// console.log(taskContainer);
-const newCard = ({
-  id,
-  imageUrl,
-  taskTitle,
-  taskType,
-  taskDescription,
-}) => `<div class="col-md-6 col-lg-4 id=${id}">
+
+// Global Storage
+let globalStore = [];
+// newCard insertion  function
+const newCard = ({ id, imageUrl, taskTitle, taskType, taskDescription }) => {
+  return `<div class="col-md-6 col-lg-4 id=${id}">  
 <div class="card m-lg-1">
     <div class="card-header d-flex justify-content-end gap-2">
         <button type="button" class="btn btn-outline-success"><i
                 class="fas fa-pencil-alt"></i></button>
         <button type="button" class="btn btn-outline-danger"><i
                 class="fas fa-trash-alt"></i></button>
-
     </div>
     <img src=${imageUrl}
         class="card-img-top p-2" alt="card img">
@@ -29,16 +27,40 @@ const newCard = ({
 
     </div>
 </div>`;
+};
+
+const loadInitialCardData = () => {
+  //localstorage get tasky card data
+  const getCardData = localStorage.getItem("tasky");          
+  if(!getCardData)return;
+  console.log(getCardData);
+  //convert from string to normal object
+  const { cards } = JSON.parse(getCardData);
+  console.log(cards);
+  //loop over these array of task object to create HTML  card,
+  cards.map((cardObject) => {
+    //inject it to DOM
+
+    taskContainer.insertAdjacentHTML("beforeend", newCard(cardObject));
+
+    //update our globalStore
+    globalStore.push(cardObject);
+  });
+};
+
 const saveChanges = () => {
   const taskData = {
-    id: `${Date.now()}`, //unique number for card id ( millisecond seconds)
+    id: `${Date.now()}`,
     imageUrl: document.getElementById("imageUrl").value,
     taskTitle: document.getElementById("taskTitle").value,
     taskType: document.getElementById("taskType").value,
     taskDescription: document.getElementById("taskDescription").value,
   };
-  console.log("image link  ")
-  console.log(taskData.imageUrl);
-  const createNewCard = newCard(taskData);
-  taskContainer.insertAdjacentHTML("beforeend", createNewCard);
+
+  taskContainer.insertAdjacentHTML("beforeend",newCard(taskData));
+
+  globalStore.push(taskData);
+
+  localStorage.setItem("tasky", JSON.stringify({ cards: globalStore })); //an object
 };
+

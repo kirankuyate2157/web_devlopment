@@ -28,10 +28,10 @@ const fileSystem = require("fs/promises");
 // console.log(process.env);
 
 // create server
-// const http = require("http");
-// http
-//   .createServer((request, Response) => {
-//     console.log(request.headers);
-//     Response.end("     hallow Client  !!!!!!!!!")
-//   })
-//   .listen(3000);
+const http = require("http");
+http
+  .createServer((request, Response) => {
+    console.log(request.headers);
+    Response.end("     hallow Client  !!!!!!!!!")
+  })
+  .listen(3000);

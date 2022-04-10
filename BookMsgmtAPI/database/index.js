@@ -1,7 +1,7 @@
-const books = [{
+let books = [{
         ISBN: '1234SOME',
         title: 'Getting started with MERN',
-        authors: ['1', ' 2', '3'],
+        authors: ['1', '2', '3'],
         language: 'en',
         pubDate: '2022-4-08',
         numOfPage: 255,
@@ -12,7 +12,7 @@ const books = [{
     {
         ISBN: '1234SO322',
         title: 'Getting started with python...',
-        authors: ['5', ' 2', '3'],
+        authors: ['5', '2', '1'],
         language: 'en',
         pubDate: '2022-4-08',
         numOfPage: 255,

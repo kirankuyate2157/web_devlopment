@@ -31,7 +31,7 @@
 // update/add new author✅
 
 // DELETE 
-// delete a book 
+// delete a book✅ 
 // delete a author from a book 
 
 //---------------------------------------------------------------------
@@ -70,10 +70,10 @@
 
 // PUT
 // update publication details(name using id) [task]🔥✅
-//update/add new book to an publication 
+//update/add new book to an publication✅ 
 
 // DELETE 
-// delete a book from publication 
+// delete a book from publication✅ 
 // delete publication 
 
 

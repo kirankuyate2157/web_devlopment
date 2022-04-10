@@ -345,6 +345,89 @@ rennzon.put("/publication/update/book/:isbn", (req, res) => {
     });
 });
 
+/*
+Route           /book/delete
+Description     delete a book 
+Access          PUBLIC
+Parameters      isbn
+Method          DELETE
+*/
+
+rennzon.delete("/book/delete/:isbn", (req, res) => {
+    // replace the whole object✅
+    // edit at single point directly to master database
+    const updateBookDatabase = database.books.filter(
+        (book) => book.ISBN !== req.params.isbn);
+
+    // return new array
+    //isbn
+    database.books = updateBookDatabase;
+    return res.json({ books: database.books });
+
+});
+
+/*
+Route           /book/delete/author
+Description     delete a book 
+Access          PUBLIC
+Parameters      isbn,author id
+Method          DELETE
+*/
+rennzon.delete("/book/delete/author/:isbn/:authId", (req, res) => {
+    database.books.forEach((book) => {
+        if (book.ISBN === req.params.isbn) {
+            const newAuthorList = book.authors.filter(
+                (author) => author !== req.params.authId);
+            book.authors = newAuthorList;
+            return;
+        }
+    });
+    //update the author database
+    database.authors.forEach((author) => {
+        const newBookList = author.books.filter(
+            (book) => book !== req.params.isbn
+        );
+        author.books = newBookList;
+        return;
+    });
+    return res.json({
+        book: database.books,
+        author: database.authors,
+        message: "author was deleted😪😪"
+    });
+});
+/*
+Route           /publication/delete/book
+Description     delete a book form publication
+Access          PUBLIC
+Parameters      isbn,publication id
+Method          DELETE
+*/
+
+rennzon.delete("/publication/delete/book/:isbn/:pubId", (req, res) => {
+    // update publication database 
+    database.publications.forEach((publication) => {
+        if (publication.id === req.params.pubId) {
+            const newBookList = publication.books.filter(
+                (book) => book !== req.params.isbn
+            );
+            publication.books = newBookList;
+            return;
+        }
+    });
+    //update book database
+    database.books.forEach((book) => {
+        if (book.ISBN === req.params.isbn) {
+            book.publication = "0"; //no publication available
+            return;
+        }
+    });
+    return res.json({
+        books: database.books,
+        publications: database.publications,
+
+    });
+});
 
 
 

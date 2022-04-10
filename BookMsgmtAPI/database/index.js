@@ -6,7 +6,7 @@ const books = [{
         pubDate: '2022-4-08',
         numOfPage: 255,
         category: ['friction', 'tech', 'Web Dev'],
-        publications: 1
+        publications: "1"
 
     },
     {
@@ -17,10 +17,11 @@ const books = [{
         pubDate: '2022-4-08',
         numOfPage: 255,
         category: ['friction', 'programing', 'tech', 'Web Dev'],
-        publications: 1
+        publications: "1"
 
     }
 ]
+
 const authors = [{
         id: '1',
         name: 'kiran',
@@ -39,10 +40,14 @@ const authors = [{
 
 ]
 const publications = [{
-    id: '1',
+    id: "1",
     name: 'Navneet',
-    books: ['1234SOME']
+    books: ['1234SOME', '1234SO322'],
 
+}, {
+    id: "2",
+    name: 'vickie publications',
+    books: [],
 }]
 
 module.exports = { books, authors, publications };

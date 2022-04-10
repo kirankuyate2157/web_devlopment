@@ -177,35 +177,173 @@ Method          GET
 */
 
 rennzon.get("/pub/:isbn", (req, res) => {
-    const getSpecificpublication = database.publications.filter((publication) =>
+    const getSpecificPublication = database.publications.filter((publication) =>
         publication.books.includes(req.params.isbn)
     );
-    if (getSpecificpublication.length === 0) {
+    if (getSpecificPublication.length === 0) {
         return res.json({
             error: `No publication found for the book ${req.params.isbn}`,
         });
     }
-    return res.json({ publications: getSpecificpublication });
+    return res.json({ publications: getSpecificPublication });
+});
+
+/*
+Route           /book/new
+Description     add new books
+Access          PUBLIC
+Parameters      NONE
+Method          POST
+*/
+rennzon.post("/book/new", (req, res) => {
+    const { newBook } = req.body;
+    database.books.push(newBook);
+    return res.json({ books: database.books, message: "book was added!" });
+});
+
+/*
+Route           /author/new
+Description     add new Author
+Access          PUBLIC
+Parameters      NONE
+Method          POST
+*/
+rennzon.post("/author/new", (req, res) => {
+    const { newAuthor } = req.body;
+    database.authors.push(newAuthor);
+    return res.json({ authors: database.authors, message: "author was added!" });
 });
 
 
+/*
+Route           /publication/new
+Description     add new publication
+Access          PUBLIC
+Parameters      NONE
+Method          POST
+*/
 
-// rennzon.get("/pub/:isbn", (req, res) => {
-//     const getSpecificPublication = database.authors.filter((publication) =>
-//         publication.books.includes(req.params.books)
-//     );
-//     if (getSpecificPublication.length === 0) {
-//         return res.json({
-//             error: `No publication found for the book isbn  ${req.params.books}`,
-//         });
-//     }
-//     return res.json({ publications: getSpecificPublication });
-// });
+rennzon.post("/publication/new", (req, res) => {
+    const { newPublication } = req.body;
+    database.publications.push(newPublication);
+    return res.json({ publications: database.publications, message: "publication was added!" });
+});
+/*
+Route           /book/update/
+Description     update the title of book
+Access          PUBLIC
+Parameters      isbn
+Method          POST
+*/
+
+rennzon.put("/book/update/:isbn", (req, res) => {
+    // forEach directly modifies the array 
+    // map => new array => replace
+    database.books.forEach((book) => {
+        if (book.ISBN === req.params.isbn) {
+            book.title = req.body.bookTitle;
+            return;
+        }
+    });
+    return res.json({ books: database.books, message: "book title updated!" });
+
+});
 
 
+/*
+Route           /book/author/update/:isbn
+Description     update/add new author
+Access          PUBLIC
+Parameters      isbn
+Method          PUT
+*/
+
+rennzon.put("/book/author/update/:isbn", (req, res) => {
+    //update the  book database 
+    database.books.forEach((book) => {
+        if (book.ISBN === req.params.isbn)
+            return book.authors.push(req.body.newAuthor);
+    });
+    // update author database
+    database.authors.forEach((author) => {
+        if (author.id === req.body.newAuthor)
+            return author.books.push(req.params.isbn);
+    });
+
+    return res.json({
+        books: database.books,
+        authors: database.authors,
+        message: "new author was added!💥"
+    });
+});
+
+/*
+Route           /author
+Description     update/add author name/details
+Access          PUBLIC
+Parameters      id
+Method          PUT
+*/
+rennzon.put("/author/update/:id", (req, res) => {
+    database.authors.forEach((author) => {
+        if (author.id === req.params.id) {
+            author.name = req.body.authorName;
+            return;
+        }
+    });
+    return res.json({ authors: database.authors, message: "author is updated!" });
+});
+
+/*
+Route           /publication/update
+Description     update/add publication name/details
+Access          PUBLIC
+Parameters      id
+Method          PUT
+*/
+
+rennzon.put("/publication/update/:id", (req, res) => {
+    database.publications.forEach((publication) => {
+        if (publication.id === req.params.id) {
+            publication.name = req.body.publicationName;
+
+            return;
+        }
+    });
+    return res.json({ publications: database.publications, message: "publication name updated!" });
+});
+
+/*
+Route           /publication/update/book
+Description     update/add new book to a publication 
+Access          PUBLIC
+Parameters      isbn
+Method          PUT
+*/
 
 
+rennzon.put("/publication/update/book/:isbn", (req, res) => {
+    //update the publication database
+    database.publications.forEach((publication) => {
+        if (publication.id === req.body.pubId) {
+            return publication.books.push(req.params.isbn);
+        }
+    });
 
+    // update the book database
+    database.books.forEach((book) => {
+        if (book.ISBN === req.params.isbn) {
+            book.publication = req.body.pubId;
+            return;
+        }
+    });
+
+    return res.json({
+        books: database.books,
+        publications: database.publications,
+        message: "publication book updated!"
+    });
+});
 
 
 

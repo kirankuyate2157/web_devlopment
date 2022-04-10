@@ -368,7 +368,7 @@ rennzon.delete("/book/delete/:isbn", (req, res) => {
 
 /*
 Route           /book/delete/author
-Description     delete a book 
+Description     delete a author from book
 Access          PUBLIC
 Parameters      isbn,author id
 Method          DELETE
@@ -396,6 +396,7 @@ rennzon.delete("/book/delete/author/:isbn/:authId", (req, res) => {
         message: "author was deleted😪😪"
     });
 });
+
 /*
 Route           /publication/delete/book
 Description     delete a book form publication
@@ -429,6 +430,36 @@ rennzon.delete("/publication/delete/book/:isbn/:pubId", (req, res) => {
     });
 });
 
+/*
+Route           /author/delete
+Description     delete a author
+Access          PUBLIC
+Parameters      id
+Method          DELETE
+*/
+rennzon.delete("/author/delete/:authId", (req, res) => {
+    const updatedAuthorDatabase = database.authors.filter((author) =>
+        author.id !== req.params.authId
+    );
 
+    database.authors = updatedAuthorDatabase;
+    return res.json({ books: database.books, authors: database.authors, message: "author was deleted!😪😪" })
+});
+
+/*
+Route           /publication/delete
+Description     delete a publication
+Access          PUBLIC
+Parameters      id
+Method          DELETE
+*/
+
+rennzon.delete("/publication/delete/:id", (req, res) => {
+    const updatePublicationList = database.publications.filter((publication) =>
+        publication.id !== req.params.id
+    )
+    database.publications = updatePublicationList;
+    return res.json({ publications: database.publications, message: "publication was deleted!😪😪" })
+});
 
 rennzon.listen(3000, () => console.log("Server is running !!⏳⏳ "));

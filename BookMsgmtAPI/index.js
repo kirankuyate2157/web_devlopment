@@ -3,7 +3,8 @@ require("dotenv").config(); //for private data security purpose
 const express = require('express')
 const res = require('express/lib/response')
 
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const help = require("nodemon/lib/help");
 
 // database
 const database = require('./database/index')
@@ -444,6 +445,21 @@ rennzon.delete('/publication/delete/:id', (req, res) => {
 });
 
 rennzon.listen(3000, () => console.log('Server is running !!⏳⏳ '));
+
+
+
+
+
 // Talk to mongoDB in which mongoDB understand => *************
 // talk to us in the way we understand  => Javascript
 // mongoose
+
+// model  -> document model of mongoDB
+// Schema -> Model ->use them
+
+
+// why schema?
+
+// mongoDB is schemaless
+
+// mongoose helps you with validation,relationship with other data ->mongoDb  44

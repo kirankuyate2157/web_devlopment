@@ -1,19 +1,23 @@
 require("dotenv").config(); //for private data security purpose
 // frame  work
 const express = require('express')
-const res = require('express/lib/response')
 
 const mongoose = require('mongoose');
-const help = require("nodemon/lib/help");
+
 
 // database
-const database = require('./database/index')
+const database = require('./database/index');
+
+// models
+const BookModels = require("./database/book");
+const AuthorModels = require("./database/author");
+const PublicationModels = require("./database/publication");
 
 // initializing the express
-const rennzon = express()
+const rennzon = express();
 
 // configurations 
-rennzon.use(express.json())
+rennzon.use(express.json());
 
 // Establish database connection 
 mongoose.connect(process.env.MONGO_URL).then(() => console.log('connection established ...!!!!'));
@@ -22,7 +26,7 @@ mongoose.connect(process.env.MONGO_URL).then(() => console.log('connection estab
 Route           /
 Description     get all books
 Access          PUBLIC
-Parameters      NONE
+Parameters      NONE 
 Method          GET
 */
 

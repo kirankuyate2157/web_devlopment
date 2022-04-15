@@ -290,21 +290,42 @@ Parameters      isbn
 Method          PUT
 */
 
-rennzon.put('/book/author/update/:isbn', (req, res) => {
+rennzon.put('/book/author/update/:isbn', async(req, res) => {
     // update the  book database 
-    database.books.forEach((book) => {
-            if (book.ISBN === req.params.isbn)
-                return book.authors.push(req.body.newAuthor)
+    const updatedBook = await BookModel.findOneAndUpdate({
+        ISBN: req.params.isbn,
+    }, {
+        $addToSet: {
+            authors: req.body.newAuthor,
+        }
+    }, {
+        new: true,
+    });
+
+
+    // database.books.forEach((book) => {
+    //         if (book.ISBN === req.params.isbn)
+    //             return book.authors.push(req.body.newAuthor)
+    //     })
+
+    // update author database
+    const updatedAuthor = await AuthorModel.findOneAndUpdate({
+            id: req.body.newAuthor,
+        }, {
+            $addToSet: {
+                books: req.params.isbn
+            },
+        }, {
+            new: true,
         })
-        // update author database
-    database.authors.forEach((author) => {
-        if (author.id === req.body.newAuthor)
-            return author.books.push(req.params.isbn)
-    })
+        // database.authors.forEach((author) => {
+        //     if (author.id === req.body.newAuthor)
+        //         return author.books.push(req.params.isbn)
+        // })
 
     return res.json({
-        books: database.books,
-        authors: database.authors,
+        books: updatedBook,
+        authors: updatedAuthor,
         message: 'new author was added!💥'
     })
 });

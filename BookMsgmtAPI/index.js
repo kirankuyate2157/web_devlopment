@@ -405,16 +405,21 @@ Parameters      isbn
 Method          DELETE
 */
 
-rennzon.delete('/book/delete/:isbn', (req, res) => {
+rennzon.delete('/book/delete/:isbn', async(req, res) => {
+    const updateBookDatabase = await BookModel.findOneAndDelete({
+        ISBN: req.params.isbn,
+    }, );
+
+
     // replace the whole object✅
-    // edit at single point directly to master database
-    const updateBookDatabase = database.books.filter(
-        (book) => book.ISBN !== req.params.isbn)
+    // // edit at single point directly to master database
+    // const updateBookDatabase = database.books.filter(
+    //     (book) => book.ISBN !== req.params.isbn)
 
     // return new array
     // isbn
-    database.books = updateBookDatabase
-    return res.json({ books: database.books })
+    // database.books = updateBookDatabase
+    return res.json({ books: updateBookDatabase, message: "book is deleted!!" })
 });
 
 /*
@@ -424,26 +429,48 @@ Access          PUBLIC
 Parameters      isbn,author id
 Method          DELETE
 */
-rennzon.delete('/book/delete/author/:isbn/:authId', (req, res) => {
-    database.books.forEach((book) => {
-            if (book.ISBN === req.params.isbn) {
-                const newAuthorList = book.authors.filter(
-                    (author) => author !== req.params.authId)
-                book.authors = newAuthorList
-                return
+rennzon.delete('/book/delete/author/:isbn/:authId', async(req, res) => {
+
+    // update the book database
+    const updatedBook = await BookModel.findOneAndUpdate({
+        ISBN: req.params.isbn
+    }, {
+        $pull: {
+            authors: req.params.authId,
+        }
+    }, {
+        new: true,
+    });
+
+    // database.books.forEach((book) => {
+    //         if (book.ISBN === req.params.isbn) {
+    //             const newAuthorList = book.authors.filter(
+    //                 (author) => author !== req.params.authId)
+    //             book.authors = newAuthorList
+    //             return
+    //         }
+    //     })
+    // update the author database
+
+    const updatedAuthor = await AuthorModel.findOneAndUpdate({
+            id: req.params.authId,
+        }, {
+            $pull: {
+                books: req.params.isbn,
             }
+        }, {
+            new: true,
         })
-        // update the author database
-    database.authors.forEach((author) => {
-        const newBookList = author.books.filter(
-            (book) => book !== req.params.isbn
-        )
-        author.books = newBookList
-        return
-    })
+        // database.authors.forEach((author) => {
+        //     const newBookList = author.books.filter(
+        //         (book) => book !== req.params.isbn
+        //     )
+        //     author.books = newBookList
+        //     return
+        // })
     return res.json({
-        book: database.books,
-        author: database.authors,
+        books: updatedBook,
+        authors: updatedAuthor,
         message: 'author was deleted😪😪'
     })
 });

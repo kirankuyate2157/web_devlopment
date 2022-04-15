@@ -9,9 +9,9 @@ const mongoose = require('mongoose');
 const database = require('./database/index');
 
 // models
-const BookModels = require("./database/book");
-const AuthorModels = require("./database/author");
-const PublicationModels = require("./database/publication");
+const BookModel = require("./database/book");
+const AuthorModel = require("./database/author");
+const PublicationModel = require("./database/publication");
 
 // initializing the express
 const rennzon = express();
@@ -30,9 +30,12 @@ Parameters      NONE
 Method          GET
 */
 
-rennzon.get('/', (req, res) => {
-    return res.json({ books: database.books })
+rennzon.get('/', async(req, res) => {
+    const getAllBooks = await BookModel.find();
+    // console.log(getAllBooks);
+    return res.json({ getAllBooks })
 });
+``
 
 /*
 Route           /is
@@ -42,10 +45,11 @@ Parameters      isbn
 Method          GET
 */
 
-rennzon.get('/is/:isbn', (req, res) => {
-    const getSpecificBook = database.books.filter((book) => book.ISBN === req.params.isbn)
+rennzon.get('/is/:isbn', async(req, res) => {
+    const getSpecificBook = await BookModel.findOne({ ISBN: req.params.isbn });
+    //if mongodb not find data return null-> false
 
-    if (getSpecificBook.length === 0) {
+    if (!getSpecificBook) {
         return res.json({
             error: `No book found for the ISBN of ${req.params.isbn}`
         })
@@ -61,15 +65,17 @@ Parameters      category
 Method          GET
 */
 
-rennzon.get('/c/:category', (req, res) => {
-    const getSpecificBooks = database.books.filter((book) => book.category.includes(req.params.category))
+rennzon.get('/c/:category', async(req, res) => {
 
-    if (getSpecificBooks.length === 0) {
+    const getSpecificBook = await BookModel.findOne({ category: req.params.category, });
+    // const getSpecificBook = database.books.filter((book) => book.category.includes(req.params.category))
+
+    if (!getSpecificBook) {
         return res.json({
             error: `No book found for the category of ${req.params.category}`
         })
     }
-    return res.json({ books: getSpecificBooks })
+    return res.json({ books: getSpecificBook })
 });
 
 /*
@@ -79,10 +85,11 @@ Access          PUBLIC
 Parameters      author
 Method          GET
 */
-rennzon.get('/a/:authors', (req, res) => {
-    const getSpecificBooks = database.books.filter((book) => book.authors.includes(req.params.authors))
+rennzon.get('/a/:authors', async(req, res) => {
+    const getSpecificBooks = await BookModel.findOne({ authors: req.params.authors })
+        // const getSpecificBooks = database.books.filter((book) => book.authors.includes(req.params.authors))
 
-    if (getSpecificBooks.length === 0) {
+    if (!getSpecificBooks) {
         return res.json({
             error: `No book found for the authors of ${req.params.authors}`
         })
@@ -97,8 +104,14 @@ Access          PUBLIC
 Parameters      a
 Method          GET
 */
-rennzon.get('/authors', (req, res) => {
-    return res.json({ authors: database.authors })
+rennzon.get('/authors', async(req, res) => {
+    const getAllAuthors = await AuthorModel.find();
+    if (!getAllAuthors) {
+        return res.json({
+            error: `No publication found `
+        })
+    }
+    return res.json({ authors: getAllAuthors });
 });
 
 /*
@@ -108,9 +121,10 @@ Access          PUBLIC
 Parameters      id
 Method          GET
 */
-rennzon.get('/publication/:id', (req, res) => {
-    const getSpecificPublication = database.publications.filter((publication) => publication.id.includes(req.params.id))
-    if (getSpecificPublication.length === 0) {
+rennzon.get('/publication/:id', async(req, res) => {
+    const getSpecificPublication = await PublicationModel.findOne({ id: req.params.id })
+        // const getSpecificPublication = database.publications.filter((publication) => publication.id.includes(req.params.id))
+    if (!getSpecificPublication) {
         return res.json({
             error: `No publication found for the id  ${req.params.id}`
         })
@@ -123,12 +137,13 @@ Route           /author
 Description     get a list of authors based on a book's ISBN
 Access          PUBLIC
 Parameters      isbn
-Method          GET
+Method          GETs
 */
 
-rennzon.get('/author/:isbn', (req, res) => {
-    const getSpecificAuthors = database.authors.filter((author) => author.books.includes(req.params.isbn))
-    if (getSpecificAuthors.length === 0) {
+rennzon.get('/author/:isbn', async(req, res) => {
+    const getSpecificAuthors = await AuthorModel.findOne({ books: req.params.isbn })
+        // const getSpecificAuthors = database.authors.filter((author) => author.books.includes(req.params.isbn))
+    if (!getSpecificAuthors) {
         return res.json({
             error: `No author found for the book ${req.params.isbn}`
         })
@@ -143,8 +158,14 @@ Access          PUBLIC
 Parameters      NONE
 Method          GET
 */
-rennzon.get('/publications', (req, res) => {
-    return res.json({ publication: database.publications })
+rennzon.get('/publications', async(req, res) => {
+    const getAllPublication = await PublicationModel.find()
+    if (!getAllPublication) {
+        return res.json({
+            error: `No publication found `
+        })
+    }
+    return res.json({ publications: getAllPublication })
 });
 
 /*
@@ -155,14 +176,15 @@ Parameters      id
 Method          GET
 */
 
-rennzon.get('/publication/:id', (req, res) => {
-    const getSpecificAuthors = database.authors.filter((publication) => publication.id.includes(req.params.id))
-    if (getSpecificAuthors.length === 0) {
+rennzon.get('/publication/:id', async(req, res) => {
+    const getSpecificPublication = await PublicationModel.findOne({ id: req.params.id })
+        // const getSpecificPublication = database.authors.filter((publication) => publication.id.includes(req.params.id))
+    if (!getSpecificPublication) {
         return res.json({
             error: `No publication found for the id  ${req.params.id}`
         })
     }
-    return res.json({ authors: getSpecificAuthors })
+    return res.json({ publications: getSpecificPublication })
 });
 
 /*
@@ -173,9 +195,10 @@ Parameters      ISBN
 Method          GET
 */
 
-rennzon.get('/pub/:isbn', (req, res) => {
-    const getSpecificPublication = database.publications.filter((publication) => publication.books.includes(req.params.isbn))
-    if (getSpecificPublication.length === 0) {
+rennzon.get('/pub/:isbn', async(req, res) => {
+    const getSpecificPublication = await PublicationModel.findOne({ books: req.params.isbn })
+        // const getSpecificPublication = database.publications.filter((publication) => publication.books.includes(req.params.isbn))
+    if (!getSpecificPublication) {
         return res.json({
             error: `No publication found for the book ${req.params.isbn}`
         })
@@ -190,10 +213,11 @@ Access          PUBLIC
 Parameters      NONE
 Method          POST
 */
-rennzon.post('/book/new', (req, res) => {
-    const { newBook } = req.body
-    database.books.push(newBook)
-    return res.json({ books: database.books, message: 'book was added!' })
+rennzon.post('/book/new', async(req, res) => {
+    const { newBook } = await req.body
+    const addNewBook = BookModel.create(newBook);
+    // database.books.push(newBook)
+    return res.json({ books: addNewBook, message: 'book was added!' })
 });
 
 /*
@@ -203,10 +227,14 @@ Access          PUBLIC
 Parameters      NONE
 Method          POST
 */
-rennzon.post('/author/new', (req, res) => {
-    const { newAuthor } = req.body
-    database.authors.push(newAuthor)
-    return res.json({ authors: database.authors, message: 'author was added!' })
+rennzon.post('/author/new', async(req, res) => {
+    const { newAuthor } = await req.body;
+    // database.books.push(newBook)
+    const addNewAuthor = AuthorModel.create(newAuthor);
+    return res.json({
+        authors: addNewAuthor,
+        message: 'Author was added!'
+    });
 });
 
 /*
@@ -217,10 +245,14 @@ Parameters      NONE
 Method          POST
 */
 
-rennzon.post('/publication/new', (req, res) => {
-    const { newPublication } = req.body
-    database.publications.push(newPublication)
-    return res.json({ publications: database.publications, message: 'publication was added!' })
+rennzon.post('/publication/new', async(req, res) => {
+    const { newPublication } = await req.body
+        // database.publications.push(newPublication)
+    const addNewPublication = PublicationModel.create(newPublication);
+    return res.json({
+        publications: addNewPublication,
+        message: 'publication was added!'
+    })
 });
 /*
 Route           /book/update/
@@ -230,16 +262,24 @@ Parameters      isbn
 Method          POST
 */
 
-rennzon.put('/book/update/:isbn', (req, res) => {
+rennzon.put('/book/update/:isbn', async(req, res) => {
+    const updatedBook = await BookModel.findOneAndUpdate({
+        ISBN: req.params.isbn
+    }, {
+        title: req.body.bookTitle,
+    }, {
+        new: true,
+    });
+
     // forEach directly modifies the array 
     // map => new array => replace
-    database.books.forEach((book) => {
-        if (book.ISBN === req.params.isbn) {
-            book.title = req.body.bookTitle
-            return
-        }
-    })
-    return res.json({ books: database.books, message: 'book title updated!' })
+    // database.books.forEach((book) => {
+    //     if (book.ISBN === req.params.isbn) {
+    //         book.title = req.body.bookTitle
+    //         return
+    //     }
+    // })
+    return res.json({ books: updatedBook, message: 'book title updated!' })
 });
 
 /*
